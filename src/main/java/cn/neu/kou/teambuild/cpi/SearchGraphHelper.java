@@ -209,6 +209,25 @@ public class SearchGraphHelper {
     }
 
     /**
+     * 返回查询中的最大边的值
+     * @return
+     */
+    public int maxWeight() {
+        int maxWeight = 0;
+        for(int id : userIdInfoMap.keySet()) {
+            UserInfo userInfo = userIdInfoMap.get(id);
+            for(Integer neighbor : userInfo.getAdjLinkMap().keySet()) {
+                Link link = userInfo.getAdjLinkMap().get(neighbor);
+                if(link.getWeight() > maxWeight) {
+                    maxWeight = (int) link.getWeight();
+                }
+            }
+
+        }
+        return maxWeight;
+    }
+
+    /**
      * 将当前的查询处理向后移动一位
      * @return 是否还有下一个
      */
@@ -220,13 +239,60 @@ public class SearchGraphHelper {
             return true;
         }
     }
-    public List<Integer> getNeighborhood(int usreId) {
-    	List<Integer> result=new ArrayList<Integer>();
-    	for(Link node:this.searchGraphInterface.findNeighbors(usreId)){
-    		result.add(node.getToUserId());
-    	}
-    	
-    	return result;
-    	
+
+    public HashMap<Integer, UserInfo> getUserIdInfoMap() {
+        return userIdInfoMap;
     }
+
+    public void setUserIdInfoMap(HashMap<Integer, UserInfo> userIdInfoMap) {
+        this.userIdInfoMap = userIdInfoMap;
+    }
+
+    public List<Integer> getSearchSequence() {
+        return searchSequence;
+    }
+
+    public void setSearchSequence(List<Integer> searchSequence) {
+        this.searchSequence = searchSequence;
+    }
+
+    public int getCurrentSearchIndex() {
+        return currentSearchIndex;
+    }
+
+    public void setCurrentSearchIndex(int currentSearchIndex) {
+        this.currentSearchIndex = currentSearchIndex;
+    }
+
+    public SearchGraphInterface getSearchGraphInterface() {
+        return searchGraphInterface;
+    }
+
+    public void setSearchGraphInterface(SearchGraphInterface searchGraphInterface) {
+        this.searchGraphInterface = searchGraphInterface;
+    }
+    public List<Integer> getNeighborhood(int node) {
+		List<Link> mem=searchGraphInterface.findNeighbors(node);
+		List<Integer> result=new ArrayList<Integer>();
+		for(Link link:mem) {
+			result.add(link.getToUserId());		
+		}
+		return result;
+	}
+    /**
+     * 
+     * @param label
+     * @return
+     */
+    public List<Integer> getnodewithlabel(int label) {
+    	List<Integer> result=new ArrayList<Integer>();
+    	int count=0;
+    	for(int i:this.searchGraphInterface.getSeq_label()) {
+    		if(i==label)
+    			result.add(count++);
+    		else
+    			count++;
+    	}
+		return result;
+	}
 }

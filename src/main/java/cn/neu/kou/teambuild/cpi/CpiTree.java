@@ -4,6 +4,7 @@ package cn.neu.kou.teambuild.cpi;
 import cn.neu.kou.teambuild.interfaces.Link;
 import cn.neu.kou.teambuild.interfaces.OriginGraphInterface;
 import cn.neu.kou.teambuild.interfaces.SearchGraphInterface;
+import cn.neu.kou.teambuild.prepare.AvailableNeighbor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class CpiTree {
     private OriginGraphInterface originGraphInterface;   //原始图的操作接口
     private SearchGraphHelper searchGraphHelper;   //查询图的业务封装对象
     private HashMap<Integer, CpiTreeNode> treeNodeMap;  //为了快速查询定义的Map，同时也用于保证每个treenode只会被初始化一次
+    private AvailableNeighbor distanceMatrix;
     public static int toltalCandidate = 0;
     public static int splitCandidate = 0;
     public static int restCandidate = 0;
@@ -32,9 +34,10 @@ public class CpiTree {
      * @param originGraphInterface     //原始图的操作接口
      * @param searchInterfce        //查询图的业务封装对象
      */
-    public CpiTree(OriginGraphInterface originGraphInterface, SearchGraphInterface searchInterfce) {
+    public CpiTree(OriginGraphInterface originGraphInterface, SearchGraphInterface searchInterfce,AvailableNeighbor availableNeighbor) {
         this.originGraphInterface = originGraphInterface;
         this.searchGraphHelper = new SearchGraphHelper(searchInterfce);
+        this.distanceMatrix=availableNeighbor;
         this.treeNodeMap = new HashMap<>();
     }
 
@@ -157,7 +160,7 @@ public class CpiTree {
      * 找到根节点的所有候选用户
      */
     private void findRootCandidateUser() {
-    	System.out.println("current creat root cpinode: "+this.root.getLabel());
+    	//System.out.println("current creat root cpinode: "+this.root.getLabel());
         List<Integer> candidateUserIdList = this.originGraphInterface.getUserWithLabel(root.getLabel());
         for(int id : candidateUserIdList) {
         	//System.out.println("current creat root cpinode: "+id);
@@ -171,7 +174,7 @@ public class CpiTree {
      */
     private void findCandidateUser(CpiTreeNode root) {
     	int nums=0;
-    	System.out.println("current search nodeId: "+root.id);
+    	//System.out.println("current search nodeId: "+root.id);
         if(root.isLeaf()) {
             return;
         }
@@ -216,7 +219,7 @@ public class CpiTree {
             weight = this.searchGraphHelper.getWeight(root.getId(), currentChild.getId());
             List<Link> candidateList = null;
 
-            candidateList = this.originGraphInterface.getAvailableNeighbors(cpiNode.getUserId(),weight, currentChild.getLabel());
+            candidateList = this.distanceMatrix.getAvailableNeighbor(cpiNode.getUserId(),weight, currentChild.getLabel());
 
             for (Link link : candidateList) {
                 currentChild.createCpiNode(link.getToUserId()); //创建被指向节点
@@ -238,7 +241,7 @@ public class CpiTree {
         float weight;
         for(CpiCorelateTreeNode currentChild : root.getCorelateNextNodeList()) {
             weight = this.searchGraphHelper.getWeight(root.getId(), currentChild.getId());
-            List<Link> candidateList = this.originGraphInterface.getAvailableNeighbors(cpiNode.userId,
+            List<Link> candidateList = this.distanceMatrix.getAvailableNeighbor(cpiNode.userId,
                     weight, currentChild.getLabel());
 
             for (Link link : candidateList) {
@@ -255,7 +258,7 @@ public class CpiTree {
      */
     private void buildTreeNode(int curUserId, CpiTreeNode root) {
     	
-    	System.out.println("current creat treeNode: "+curUserId);
+    	//System.out.println("current creat treeNode: "+curUserId);
 
         //获取当前节点的孩子节点
         HashSet<Integer> children = this.searchGraphHelper.getNotVisistNeighbor(curUserId, treeNodeMap.keySet());
@@ -461,4 +464,29 @@ public class CpiTree {
     	}
     	
 	}
+    /**
+     * 删除标签的增量式方法实现
+     * @param del_map 传入的Hashmap：键为删除的标签 ，值为 键对应的节点，
+     */
+    public void delete_node(HashMap<Integer,List<Integer>> del_map) {
+    	
+    	for(int del_label:del_map.keySet()) {
+    		
+    		List<Integer> node=del_map.get(del_label);
+    		
+    		for(int search_node:this.searchGraphHelper.getnodewithlabel(del_label))
+    		{
+    			CpiTreeNode cpiTreeNode=this.treeNodeMap.get(search_node);
+    			for(int key:node) {
+    				cpiTreeNode.candidateUserMap.remove(key);
+    			}
+    		}
+    		
+    	}
+    	this.splitTree();
+    	this.bottom_up();
+    	
+
+    	
+    }
 }

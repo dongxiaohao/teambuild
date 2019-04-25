@@ -186,18 +186,18 @@ public class Search {
      * @return
      */
     private boolean addTeam(ValidateTeam team) {
-        int curEdgeSum = 0;
-        for(int key : team.getAdjMap().keySet()) {
-            curEdgeSum += team.getAdjMap().get(key).size();
-        }
+      //  int curEdgeSum = 0;
+      //  for(int key : team.getAdjMap().keySet()) {
+       //     curEdgeSum += team.getAdjMap().get(key).size();
+     //   }
 
-        if(curEdgeSum == this.edgeNum) {
+        //if(curEdgeSum == this.edgeNum) {
             this.validateTeamSet.add(team);
             //避免无穷无尽的搜索
             if(this.maxResult <= this.validateTeamSet.size()) {
-                return false;
+               return false;
             }
-        }
+        //}
         return true;
     }
 

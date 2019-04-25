@@ -14,11 +14,24 @@ public class Config{
     //如果在不同的机器上跑修改这个路径就行了
     public static String BASE_PATH = "src/main/resources/";
 
-    public static String EMAIL_ORIGIN_MATRIX_FILE_PATH = BASE_PATH + "email-Enron.txt"+File.separator+"email-Enron_test.txt .txt";
-    public static String EMAIL_ORIGIN_LABEL_FILE_PATH = BASE_PATH  + "email-Enron.txt"+ File.separator +"email-Enron_label.txt";
+    public static String EMAIL_ORIGIN_MATRIX_FILE_PATH = BASE_PATH + "email-Enron.txt"+File.separator+"new_email-Enron.txt";
+    
+    public static String EMAIL_ORIGIN_MATRIX_FILE_PATH_SMALL = BASE_PATH + "email-Enron.txt"+File.separator+"new_email-Enron_small.txt";
+    public static String EMAIL_ORIGIN_MATRIX_FILE_PATH_MEDIUM1 = BASE_PATH + "email-Enron.txt"+File.separator+"email-Enron_test.txt_medium1.txt";
+    public static String EMAIL_ORIGIN_MATRIX_FILE_PATH_MEDIUM2 = BASE_PATH + "email-Enron.txt"+File.separator+"email-Enron_test.txt_medium2.txt";
+    public static String EMAIL_ORIGIN_MATRIX_FILE_PATH_LAGER = BASE_PATH + "email-Enron.txt"+File.separator+"email-Enron_test.txt__lager.txt";
+    
+    public static String EMAIL_ORIGIN_LABEL_FILE_PATH = BASE_PATH  + "email-Enron.txt"+ File.separator +"new_Enron_label.txt";
 
     public static String FACEBOOK_ORIGIN_MATRIX_FILE_PATH = BASE_PATH + "facebook_combined.txt" + File.separator + "new_facebook_combined.txt";
+    
+    public static String FACEBOOK_ORIGIN_MATRIX_FILE_PATH_SMALL = BASE_PATH + "facebook_combined.txt" + File.separator + "new_facebook_combined_small.txt";
+    public static String FACEBOOK_ORIGIN_MATRIX_FILE_PATH_MEDIUM1 = BASE_PATH + "facebook_combined.txt" + File.separator + "new_facebook_combined_medium1.txt";
+    public static String FACEBOOK_ORIGIN_MATRIX_FILE_PATH_MEDIUM2 = BASE_PATH + "facebook_combined.txt" + File.separator + "new_facebook_combined_medium2.txt";
+    public static String FACEBOOK_ORIGIN_MATRIX_FILE_PATH_LAGER = BASE_PATH + "facebook_combined.txt" + File.separator + "new_facebook_combined_lager.txt";
+    
     public static String FACEBOOK_ORIGIN_LABEL_FILE_PATH = BASE_PATH  + "facebook_combined.txt" + File.separator + "facebook_combined_label.txt";
+    
     
     public static String JOURNAL_ORIDIN_MATRIX_FILE_PATH=BASE_PATH+"soc-LiveJournal1.txt" + File.separator + "new_soc-LiveJournal1.txt";
     public static String JOURNAL_ORIDIN_LABEL_FILE_PATH=BASE_PATH+"soc-LiveJournal1.txt" + File.separator + "soc-LiveJournal1_label.txt";

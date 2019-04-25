@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import org.apache.ibatis.javassist.expr.NewArray;
+
 import cn.neu.kou.teambuild.interfaces.Link;
 import cn.neu.kou.teambuild.interfaces.OriginGraphInterface;
 
@@ -70,6 +72,7 @@ public class Origin_graph implements OriginGraphInterface {
             if(e1<e2) { //若e1<e2则表示还未添加，否则应已添加进邻接图中
                 this.graph[e1]=new Edge(e2,weigth,this.graph[e1]); //将第二条边加入的一条边的邻接矩阵
                 this.graph[e2]=new Edge(e1,weigth,this.graph[e2]); //将第一条边加入的二条边的邻接矩阵
+                
             }
             //System.out.println(line+" "+e1+" "+e2+" "+weigth);
 
@@ -190,8 +193,6 @@ public class Origin_graph implements OriginGraphInterface {
 		for(int i=0;i<node.size();i++) {
 			result.add(new Link(node.get(i),this.graph_lable.lable.get(node.get(i)),node_wei.get(i)));	//创建一个Link对象并加入，分别为节点Id，节点类型，节点与源节点之间权重；
 		}
-		
-		
 		return result;
 	}
 
@@ -465,15 +466,22 @@ public class Origin_graph implements OriginGraphInterface {
 	/**
 	 * 随即删除节点数目的标签
 	 */
-	public List<Integer> delte_label(int count) {
-		List<Integer> dele_node=new ArrayList<Integer>();
+	public HashMap<Integer,List<Integer>> delte_label(int count) {
+		 HashMap<Integer,List<Integer>> dele_node=new  HashMap<Integer,List<Integer>>();
 		for(int i=0;i<count;i++) {
 			int user=(int)(Math.random()*this.getNodeNumber());
 			if(this.getLabel(user)==Integer.MAX_VALUE)
 				i--;
 			else {
-				this.graph_lable.setlabel(user, Integer.MAX_VALUE);
-				dele_node.add(user);
+				if(dele_node.containsKey(this.getLabel(user))) {
+					dele_node.get(this.getLabel(user)).add(user);
+					this.graph_lable.setlabel(user, Integer.MAX_VALUE);
+				}else {
+					List<Integer> node=new ArrayList<Integer>();
+					node.add(user);
+					dele_node.put(this.getLabel(user),node);
+					this.graph_lable.setlabel(user, Integer.MAX_VALUE);
+				}
 			}
 		}
 		return dele_node;
