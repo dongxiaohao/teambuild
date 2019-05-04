@@ -1,0 +1,8 @@
+## ignore this file ##
+.idea
+target
+.project
+.classpath
+.settings
+TeamBuild.iml
+src/main/resources/*
