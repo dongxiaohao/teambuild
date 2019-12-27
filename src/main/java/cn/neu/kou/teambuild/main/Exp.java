@@ -36,11 +36,11 @@ public class Exp {
     	//lables journaLables=new lables("D:\\git\\TeamBuild\\src\\main\\resources\\soc-LiveJournal1.txt", 4847571, 20, "soc-LiveJournal1_label");
     	
     	
-     //  Origin_graph origin_graph = new Origin_graph(36692, 20, Config.EMAIL_ORIGIN_MATRIX_FILE_PATH, Config.EMAIL_ORIGIN_LABEL_FILE_PATH);
-      Origin_graph origin_graph = new Origin_graph(4039, 20, Config.FACEBOOK_ORIGIN_MATRIX_FILE_PATH, "src/main/resources/facebook_combined.txt/new_facebook_label.txt");
-        //Origin_graph origin_graph =new Origin_graph(4847571, 20,Config.JOURNAL_ORIDIN_MATRIX_FILE_PATH, Config.JOURNAL_ORIDIN_LABEL_FILE_PATH);
-         //origin_graph.read_new_Matrix(Config.JOURNAL_ORIDIN_MATRIX_FILE_PATH);
-         //origin_graph.bianli();
+       Origin_graph origin_graph = new Origin_graph(36692, 20, Config.EMAIL_ORIGIN_MATRIX_FILE_PATH, Config.EMAIL_ORIGIN_LABEL_FILE_PATH);
+//      Origin_graph origin_graph = new Origin_graph(4039, 20, Config.FACEBOOK_ORIGIN_MATRIX_FILE_PATH, "src/main/resources/facebook_combined.txt/new_facebook_label.txt");
+//        Origin_graph origin_graph =new Origin_graph(4847571, 20,Config.JOURNAL_ORIDIN_MATRIX_FILE_PATH, Config.JOURNAL_ORIDIN_LABEL_FILE_PATH);
+//         origin_graph.read_new_Matrix(Config.JOURNAL_ORIDIN_MATRIX_FILE_PATH);
+//         origin_graph.bianli();
          // origin_graph.change_weight("/home/user1/teambuild/TeamBuild/src/main/resources/soc-LiveJournal1.txt", "new_soc-LiveJournal1");
          
       //query_graph query_graph = new query_graph(5, 2, Config.SMALL_SEARCH_MATRIX_FILE_PATH, Config.SMALL_SEARCH_LABEL_FILE_PATH);
@@ -99,58 +99,59 @@ public class Exp {
         */
         
       AvailableNeighbor availableNeighbor=new AvailableNeighbor(query_graph, origin_graph);
-     // availableNeighbor.init();
-      //availableNeighbor.toFile(Config.EMAIL_ORIGIN_MATRIX_FILE_PATH_SMALL);
-    availableNeighbor.fromFile(Config.FACEBOOK_ORIGIN_MATRIX_FILE_PATH_MEDIUM2);
-     StringBuilder stringBuilder=new StringBuilder();
-      
+//      availableNeighbor.init();
+//      availableNeighbor.toFile(Config.EMAIL_ORIGIN_MATRIX_FILE_PATH_MEDIUM2);
+      availableNeighbor.fromFile(Config.EMAIL_ORIGIN_MATRIX_FILE_PATH_MEDIUM2);
+//    availableNeighbor.fromFile(Config.FACEBOOK_ORIGIN_MATRIX_FILE_PATH_MEDIUM2);
+//     StringBuilder stringBuilder=new StringBuilder();
+//
       System.gc();
       long total = Runtime.getRuntime().totalMemory(); // byte
       long m1 = Runtime.getRuntime().freeMemory();
-     System.out.println("before:" + (total - m1)/1024.0); 
-     
+     System.out.println("before:" + (total - m1)/1024.0);
+
       CpiTree cpiTree = new CpiTree(origin_graph, query_graph,availableNeighbor);
-      
-        
+
+
         //int a=s.nextInt();
         cpiTree.buildTree();
-        
+
         System.gc();
         long total1 = Runtime.getRuntime().totalMemory();
         long m2 = Runtime.getRuntime().freeMemory();
         System.out.println("after creat tree:" + (total1 - m2)/1024.0);
-        
+
         //a=s.nextInt();
        cpiTree.splitTree();
-       
+
        System.gc();
        long total2 = Runtime.getRuntime().totalMemory();
        long m3 = Runtime.getRuntime().freeMemory();
        System.out.println("after top -dowm :" + (total2 - m3)/1024.0);
-        
+
        // a=s.nextInt();
        cpiTree.bottom_up();
-       
+
        System.gc();
        long total3 = Runtime.getRuntime().totalMemory();
        long m4 = Runtime.getRuntime().freeMemory();
        System.out.println("after bottom_up :" + (total3 - m4)/1024.0);
-        
+
        // a=s.nextInt();
         System.out.println("spilt over!");
-        
-        long startTime_1 = System.currentTimeMillis(); 
-        
+
+        long startTime_1 = System.currentTimeMillis();
+
         Search search = new Search(cpiTree,1000);
         search.generateAllTeam();
         search.getValidateTeamSet();
         System.out.println(search.getValidateTeamSet().size());
-        
+
         Criteria criteria = new Criteria(origin_graph, query_graph);
         MinCostTeam minCostTeam = new MinCostTeam(criteria);
         minCostTeam.minStructRestrictTeam(search.getValidateTeamSet());
         minCostTeam.printMinStructRestricTeamAllCriteria();
-        
+
         long endTime_1 = System.currentTimeMillis();
         System.out.println("不考虑匹配顺序:"+(endTime_1-startTime_1)+"ms");
         
@@ -164,8 +165,9 @@ public class Exp {
         
         
         
-        /*
-        
+
+
+
         long startTime_2 = System.currentTimeMillis();
         
         Search search_2 = new Search(cpiTree, 20000);
@@ -180,18 +182,18 @@ public class Exp {
         
         
         long startTime_3 = System.currentTimeMillis();
-        
+
         Search search_3=new Search(cpiTree, 1000);
         search_3.generateAllTeam();
         System.out.println(search_3.getValidateTeamSet().size());
-        
+
         minCostTeam.minStructRestrictTeam(search_3.getValidateTeamSet());
         minCostTeam.printMinStructRestricTeamAllCriteria();
-        
+
         long endTime_3 = System.currentTimeMillis();
         System.out.println("考虑匹配顺序，对CPG进行了标准化，且剪枝（本文）:"+(endTime_3-startTime_3)+"ms");
         
-        */
+
         
         /*
         Criteria criteria = new Criteria(origin_graph, query_graph);

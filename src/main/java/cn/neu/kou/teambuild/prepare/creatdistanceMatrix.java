@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import org.apache.ibatis.ognl.OgnlRuntime.ArgsCompatbilityReport;
+//import org.apache.ibatis.ognl.OgnlRuntime.ArgsCompatbilityReport;
 
 import cn.neu.kou.teambuild.graph.Origin_graph;
 import cn.neu.kou.teambuild.graph.query_graph;
